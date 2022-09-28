@@ -1,92 +1,43 @@
-# N Queens
+The eight queens puzzle is the problem of placing eight chess queens on an 8×8 chessboard so that no two queens threaten each other; thus, a solution requires that no two queens share the same row, column, or diagonal. There are 92 solutions. The problem was first posed in the mid-19th century. In the modern era, it is often used as an example problem for various computer programming techniques.
 
+The n-queens puzzle is the same problem but on any board of n rows and n columns.
 
+You should have a function named find_positions(n) that takes the size of the n by n board and returns a list of the rows of the queen in each column, if a solution exists, otherwise returns None.
 
-## Getting started
+For example, here's one potential solution for a 4x4 board.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+The result for this would be this zero-based list of positions for that arrangement in the previous image.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+How to approach this problem
+There are three main parts to this problem:
 
-## Add your files
+How to model the chessboard
+How to determine if a position is "safe" for a given column
+Figuring out the loops
+There are a lot of solutions for this on the Web. If you get stuck, you may want to try to find one, read it, close it, then adapt what they showed you from memory.
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+Modeling the chessboard
+Because the chessboard is an n by n matrix, a good way to model this is to build an n by n list. We know how to do this in  time using nested loops.
 
-```
-cd existing_repo
-git remote add origin https://gitlab.com/DoronioF/n-queens.git
-git branch -M main
-git push -uf origin main
-```
+You can start off by putting 0 values in all of the places in the list of lists which would represent no queens on the board.
 
-## Integrate with your tools
+A value of 1 in one of the positions in the list of lists would indicate that a queen is on the board.
 
-- [ ] [Set up project integrations](https://gitlab.com/DoronioF/n-queens/-/settings/integrations)
+Determining if a position is safe
+You have to search the row and diagonals to determine if the queen is "safe", that is, there is no other queen in the same row or diagonal as the queen being placed.
 
-## Collaborate with your team
+You can search your square list that you created to model the chessboard to find out if another queen is in the same row or diagonal as the queen you're trying to place.
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+Search the same row to see if there's a 1 in the row. If there is, it is not a safe move.
+Search the two diagonals from the current row-column position to see if there's a 1 in either diagonal. If there is, it is not a safe move.
+Figuring out the loops
+This is really the meat of the problem. You want to start at the first column, then loop over each row to find out if its a safe position. If it is, mark the position with a "1" in the list of lists that is your board. Move to the next column, loop over the rows, and find a safe place.
 
-## Test and Deploy
+If you get to a position where there are no safe moves, then you have to "unwind" your choices to that point and try, again.
 
-Use the built-in continuous integration in GitLab.
+Eventually, even the brute force method will solve this for small boards of size 4 or 5.
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+Try to get that working for a small board of 4 or 5. Then, try 6 and see if you can make it run faster.
 
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Solution
+We will release a solution for the N-Queens problem, tomorrow.
